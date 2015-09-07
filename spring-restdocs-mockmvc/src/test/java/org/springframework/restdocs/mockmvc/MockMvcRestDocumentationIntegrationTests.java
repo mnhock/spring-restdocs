@@ -83,7 +83,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Integration tests for using Spring REST Docs with Spring Test's Mock MVC.
+ * Integration tests for using Spring REST Docs with Spring Test's MockMvc.
  *
  * @author Andy Wilkinson
  * @author Dewet Diener

@@ -26,7 +26,7 @@ to change one or more of the defaults to suit your needs:
 
 [source,java,indent=0]
 ----
-include::{examples-dir}/com/example/CustomUriConfiguration.java[tags=custom-uri-configuration]
+include::{examples-dir}/com/example/mockmvc/CustomUriConfiguration.java[tags=custom-uri-configuration]
 ----
 
 TIP: To configure a request's context path, use the `contextPath` method on
@@ -39,11 +39,18 @@ TIP: To configure a request's context path, use the `contextPath` method on
 
 The default encoding used by Asciidoctor is `UTF-8`. Spring REST Docs adopts the same
 default for the snippets that it generates. If you require an encoding other than `UTF-8`,
-use `RestDocumentationMockMvcConfigurer` to configure it:
+it can be configured.
 
 [source,java,indent=0]
+.Custom encoding with MockMvc
 ----
-include::{examples-dir}/com/example/CustomEncoding.java[tags=custom-encoding]
+include::{examples-dir}/com/example/mockmvc/CustomEncoding.java[tags=custom-encoding]
+----
+
+[source,java,indent=0]
+.Custom encoding with REST Assured
+----
+include::{examples-dir}/com/example/restassured/CustomEncoding.java[tags=custom-encoding]
 ----
 
 
@@ -63,5 +70,5 @@ snippet by default:
 
 [source,java,indent=0]
 ----
-include::{examples-dir}/com/example/CustomDefaultSnippetsConfiguration.java[tags=custom-default-snippets]
+include::{examples-dir}/com/example/mockmvc/CustomDefaultSnippetsConfiguration.java[tags=custom-default-snippets]
 ----

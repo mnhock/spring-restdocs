@@ -103,7 +103,7 @@ public class RestDocumentationResultHandler implements ResultHandler {
 	}
 
 	/**
-	 * Adds the given {@code snippets} such that that are documented when this result
+	 * Adds the given {@code snippets} such that they are documented when this result
 	 * handler is called.
 	 *
 	 * @param snippets the snippets to add

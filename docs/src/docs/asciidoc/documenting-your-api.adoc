@@ -252,32 +252,22 @@ method will be used in the documentation.
 [[documenting-your-api-request-parameters]]
 === Request parameters
 
-A request's parameters can be documented using `requestParameters`. Request parameters
-can be included in a `GET` request's query string. For example:
+A request's parameters (either from a query string or from POSTed form data) can be
+documented using `requestParameters`. For example:
 
 [source,java,indent=0]
 ----
-include::{examples-dir}/com/example/RequestParameters.java[tags=request-parameters-query-string]
+include::{examples-dir}/com/example/RequestParameters.java[tags=request-parameters]
 ----
-<1> Perform a `GET` request with two parameters, `page` and `per_page` in the query
-	string.
-<2> Configure Spring REST Docs to  produce a snippet describing the request's parameters.
+<1> Configure Spring REST Docs to produce a snippet describing the request's parameters.
 	Uses the static `requestParameters` method on
 	`org.springframework.restdocs.request.RequestDocumentation`.
-<3> Document the `page` parameter. Uses the static `parameterWithName` method on
+<2> Document the `page` parameter. Uses the static `parameterWithName` method on
 	`org.springframework.restdocs.request.RequestDocumentation`.
-<4> Document the `per_page` parameter.
+<3> Document the `per_page` parameter.
 
-Request parameters can also be included as form data in the body of a POST request:
-
-[source,java,indent=0]
-----
-include::{examples-dir}/com/example/RequestParameters.java[tags=request-parameters-form-data]
-----
-<1> Perform a `POST` request with a single parameter, `username`.
-
-In both cases, the result is a snippet named `request-parameters.adoc` that contains a
-table describing the parameters that are supported by the resource.
+The result is a snippet named `request-parameters.adoc` that contains a table describing
+the parameters that are supported by the resource.
 
 When documenting request parameters, the test will fail if an undocumented request
 parameter is used in the request. Similarly, the test will also fail if a documented
@@ -309,9 +299,9 @@ include::{examples-dir}/com/example/PathParameters.java[tags=path-parameters]
 The result is a snippet named `path-parameters.adoc` that contains a table describing
 the path parameters that are supported by the resource.
 
-TIP: To make the path parameters available for documentation, the request must be
-built using one of the methods on `RestDocumentationRequestBuilders` rather than
-`MockMvcRequestBuilders`.
+TIP: If you are using MockMvc, to make the path parameters available for documentation,
+the request must be built using one of the methods on `RestDocumentationRequestBuilders`
+rather than `MockMvcRequestBuilders`.
 
 When documenting path parameters, the test will fail if an undocumented path parameter
 is used in the request. Similarly, the test will also fail if a documented path parameter
@@ -333,13 +323,12 @@ The headers in a request or response can be documented using `requestHeaders` an
 ----
 include::{examples-dir}/com/example/HttpHeaders.java[tags=headers]
 ----
-<1> Perform a `GET` request with an `Authorization` header that uses basic authentication
-<2> Configure Spring REST Docs to produce a snippet describing the request's headers.
+<1> Configure Spring REST Docs to produce a snippet describing the request's headers.
 	Uses the static `requestHeaders` method on
 	`org.springframework.restdocs.headers.HeaderDocumentation`.
-<3> Document the `Authorization` header. Uses the static `headerWithName` method on
+<2> Document the `Authorization` header. Uses the static `headerWithName` method on
 	`org.springframework.restdocs.headers.HeaderDocumentation.
-<4> Produce a snippet describing the response's headers. Uses the static `responseHeaders`
+<3> Produce a snippet describing the response's headers. Uses the static `responseHeaders`
 	method on `org.springframework.restdocs.headers.HeaderDocumentation`.
 
 The result is a snippet named `request-headers.adoc` and a snippet named
@@ -502,13 +491,20 @@ method:
 
 [source,java,indent=0]
 ----
-include::{examples-dir}/com/example/AlwaysDo.java[tags=always-do]
+include::{examples-dir}/com/example/mockmvc/ParameterizedOutput.java[tags=parameterized-output]
 ----
 
-With this configuration in place, every call to `MockMvc.perform` will produce
-the <<documenting-your-api-default-snippets,default snippets>> without any further
-configuration. Take a look at the `GettingStartedDocumentation` classes in each of the
-sample applications to see this functionality in action.
+A similar approach is also possible with REST Assured:
+
+[source,java,indent=0]
+----
+include::{examples-dir}/com/example/restassured/ParameterizedOutput.java[tags=parameterized-output]
+----
+
+With this configuration in place, every call to the service made via Spring MVC Test or
+REST Assured will produce the <<documenting-your-api-default-snippets,default snippets>>
+without any further configuration. Take a look at the `GettingStartedDocumentation`
+classes in each of the sample applications to see this functionality in action.
 
 
 

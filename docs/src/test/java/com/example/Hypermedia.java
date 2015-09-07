@@ -16,39 +16,27 @@
 
 package com.example;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 public class Hypermedia {
 
-	private MockMvc mockMvc;
-
 	public void defaultExtractor() throws Exception {
 		// tag::links[]
-		this.mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andDo(document("index", links( // <1>
-					linkWithRel("alpha").description("Link to the alpha resource"), // <2>
-					linkWithRel("bravo").description("Link to the bravo resource")))); // <3>
+		document("index", links( // <1>
+				linkWithRel("alpha").description("Link to the alpha resource"), // <2>
+				linkWithRel("bravo").description("Link to the bravo resource"))); // <3>
 		// end::links[]
 	}
 
 	public void explicitExtractor() throws Exception {
-		this.mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			//tag::explicit-extractor[]
-			.andDo(document("index", links(halLinks(), // <1>
-					linkWithRel("alpha").description("Link to the alpha resource"),
-					linkWithRel("bravo").description("Link to the bravo resource"))));
-			// end::explicit-extractor[]
+		// tag::explicit-extractor[]
+		document("index", links(halLinks(), // <1>
+				linkWithRel("alpha").description("Link to the alpha resource"),
+				linkWithRel("bravo").description("Link to the bravo resource")));
+		// end::explicit-extractor[]
 	}
-
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package com.example;
+package com.example.restassured;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.specification.RequestSpecification;
 
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
 public class InvokeService {
 
-	private MockMvc mockMvc;
+	private RequestSpecification spec;
 
 	public void invokeService() throws Exception {
 		// tag::invoke-service[]
-		this.mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON)) // <1>
-			.andExpect(status().isOk()) // <2>
-			.andDo(document("index")); // <3>
+		RestAssured.given(this.spec) // <1>
+				.accept("application/json") // <2>
+				.filter(document("index")) // <3>
+				.when().get("/") // <4>
+				.then().assertThat().statusCode(is(200)); // <5>
 		// end::invoke-service[]
 	}
-
 }

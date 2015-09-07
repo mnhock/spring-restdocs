@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example;
+package com.example.mockmvc;
 
 import static org.springframework.restdocs.curl.CurlDocumentation.curlRequest;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;

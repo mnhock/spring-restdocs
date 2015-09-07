@@ -16,27 +16,19 @@
 
 package com.example;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.removeHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
-import org.springframework.test.web.servlet.MockMvc;
-
 public class PreprocessingPerTest {
-
-	private MockMvc mockMvc;
 
 	public void general() throws Exception {
 		// tag::preprocessing[]
-		this.mockMvc.perform(get("/"))
-			.andExpect(status().isOk())
-			.andDo(document("index",
-					preprocessRequest(removeHeaders("Foo")), // <1>
-					preprocessResponse(prettyPrint()))); // <2>
+		document("index",
+				preprocessRequest(removeHeaders("Foo")), // <1>
+				preprocessResponse(prettyPrint())); // <2>
 		// end::preprocessing[]
 	}
 

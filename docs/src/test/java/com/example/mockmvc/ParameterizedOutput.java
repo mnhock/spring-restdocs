@@ -14,36 +14,34 @@
  * limitations under the License.
  */
 
-package com.example;
-
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+package com.example.mockmvc;
 
 import org.junit.Before;
 import org.junit.Rule;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.RestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-public class CustomEncoding {
-	
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+
+public class ParameterizedOutput {
+
 	@Rule
 	public final RestDocumentation restDocumentation = new RestDocumentation("build");
 
-	@Autowired
-	private WebApplicationContext context;
-
 	private MockMvc mockMvc;
 
+	private WebApplicationContext context;
+
+	// tag::parameterized-output[]
 	@Before
 	public void setUp() {
-		// tag::custom-encoding[]
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-				.apply(documentationConfiguration(this.restDocumentation).snippets()
-						.withEncoding("ISO-8859-1"))
-				.build();
-		// end::custom-encoding[]
+				.apply(documentationConfiguration(this.restDocumentation))
+				.alwaysDo(document("{method-name}/{step}/")).build();
 	}
+	// end::parameterized-output[]
 
 }

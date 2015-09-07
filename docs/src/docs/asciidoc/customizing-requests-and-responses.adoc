@@ -2,8 +2,14 @@
 == Customizing requests and responses
 
 There may be situations where you do not want to document a request exactly as it was sent
-or a response exactly as it was received. Spring REST Docs provides a number of
-preprocessors that can be used to modify a request or response before it's documented.
+or a response exactly as it was received. Spring REST Docs <<Preprocessors, provides a
+number of preprocessors>> that can be used to modify a request or response before it's
+documented.
+
+
+
+[[customizing-requests-and-responses-preprocessing-one-test]]
+=== Preprocessing requests and responses in a single test
 
 Preprocessing is configured by calling `document` with an `OperationRequestPreprocessor`,
 and/or an `OperationResponsePreprocessor`. Instances can be obtained using the
@@ -17,33 +23,71 @@ include::{examples-dir}/com/example/PreprocessingPerTest.java[tags=preprocessing
 <1> Apply a request preprocessor that will remove the header named `Foo`.
 <2> Apply a response preprocessor that will pretty print its content.
 
+
+
+[[customizing-requests-and-responses-preprocessing-every-test]]
+=== Preprocessing requests and responses in every test
+
 Alternatively, you may want to apply the same preprocessors to every test. You can do
 so by configuring the preprocessors in your `@Before` method and using the
 <<documentating-your-api-parameterized-output-directories, support for parameterized
-output directories>>:
+output directories>>. The exact approach varies a little depending on whether you are
+using MockMvc or REST Assured.
+
+
+
+[[customizing-requests-and-responses-preprocessing-every-test-mockmvc]]
+==== Preprocessing in every test using MockMvc
+
+First, perform the setup in your `@Before` method:
 
 [source,java,indent=0]
 ----
-include::{examples-dir}/com/example/PreprocessingEveryTest.java[tags=setup]
+include::{examples-dir}/com/example/mockmvc/PreprocessingEveryTest.java[tags=setup]
 ----
 <1> Create the `RestDocumentationResultHandler`, configured to preprocess the request
 	and response.
-<2> Create the `MockMvc` instance, configured to always call the documentation result
-	handler.
+<2> Use `alwaysDo` when creating the `MockMvc` instance so that it configured to always
+	call the documentation result handler.
 
-Then, in each test, the `RestDocumentationResultHandler` can be configured with anything
-test-specific. For example:
+In each test, the `RestDocumentationResultHandler`  can be configured with anything
+test-specific before the call to the service is made:
 
 [source,java,indent=0]
 ----
-include::{examples-dir}/com/example/PreprocessingEveryTest.java[tags=use]
+include::{examples-dir}/com/example/mockmvc/PreprocessingEveryTest.java[tags=use]
 ----
 <1> Document the links specific to the resource that is being tested
 <2> The `perform` call will automatically produce the documentation snippets due to the
 	use of `alwaysDo` above.
 
-Various built in preprocessors, including those illustrated above, are available via the
-static methods on `Preprocessors`. See <<Preprocessors, below>> for further details.
+
+
+[[customizing-requests-and-responses-preprocessing-every-test-rest-assured]]
+==== Preprocessing in every test using REST Assured
+
+First, perform the setup in your `@Before` method:
+
+[source,java,indent=0]
+----
+include::{examples-dir}/com/example/restassured/PreprocessingEveryTest.java[tags=setup]
+----
+<1> Create the `RestDocumentationFilter`, configured to preprocess the request
+	and response.
+<2> Use `addFilter` when creating the `RequestSpecification` instance, so that it is
+	configured to always call the documentation filter.
+
+In each test, the `RestDocumentationFilter` can be configured with anything
+test-specific before the call to the service is made:
+
+[source,java,indent=0]
+----
+include::{examples-dir}/com/example/restassured/PreprocessingEveryTest.java[tags=use]
+----
+<1> Create the `RestDocumentationFilter`, configured to preprocess the request
+	and response.
+<2> Create the `RequestSpecification` instance, configured to always call the
+	documentation result handler.
 
 
 
@@ -85,6 +129,8 @@ from the request or response.
 `replacePattern` on `Preprocessors` provides a general purpose mechanism for
 replacing content in a request or response. Any occurrences of a regular expression are
 replaced.
+
+
 
 [[customizing-requests-and-responses-preprocessors-writing-your-own]]
 ==== Writing your own preprocessor

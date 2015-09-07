@@ -14,28 +14,37 @@
  * limitations under the License.
  */
 
-package com.example;
+package com.example.mockmvc;
+
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class HttpHeaders {
 
+	private MockMvc mockMvc;
+
 	public void headers() throws Exception {
 		// tag::headers[]
-		document("headers",
-				requestHeaders( // <1>
-						headerWithName("Authorization").description(
-								"Basic auth credentials")), // <2>
-				responseHeaders( // <3>
-						headerWithName("X-RateLimit-Limit").description(
-								"The total number of requests permitted per period"),
-						headerWithName("X-RateLimit-Remaining").description(
-								"Remaining requests permitted in current period"),
-						headerWithName("X-RateLimit-Reset").description(
-								"Time at which the rate limit period will reset")));
+		this.mockMvc
+				.perform(get("/people").header("Authorization", "Basic dXNlcjpzZWNyZXQ=")) // <1>
+				.andExpect(status().isOk())
+				.andDo(document("headers",
+						requestHeaders( // <2>
+								headerWithName("Authorization").description( 
+										"Basic auth credentials")), // <3>
+						responseHeaders( // <4>
+								headerWithName("X-RateLimit-Limit").description(
+										"The total number of requests permitted per period"),
+								headerWithName("X-RateLimit-Remaining").description(
+										"Remaining requests permitted in current period"),
+								headerWithName("X-RateLimit-Reset").description(
+										"Time at which the rate limit period will reset"))));
 		// end::headers[]
 	}
 }

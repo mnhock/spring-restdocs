@@ -14,36 +14,25 @@
  * limitations under the License.
  */
 
-package com.example;
+package com.example.mockmvc;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.springframework.restdocs.RestDocumentation;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-public class AlwaysDo {
-	
-	@Rule
-	public final RestDocumentation restDocumentation = new RestDocumentation("build");
+public class InvokeService {
 
 	private MockMvc mockMvc;
 
-	private WebApplicationContext context;
-	
-	
-
-	// tag::always-do[]
-	@Before
-	public void setUp() {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-				.apply(documentationConfiguration(this.restDocumentation))
-				.alwaysDo(document("{method-name}/{step}/"))
-				.build();
+	public void invokeService() throws Exception {
+		// tag::invoke-service[]
+		this.mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON)) // <1>
+			.andExpect(status().isOk()) // <2>
+			.andDo(document("index")); // <3>
+		// end::invoke-service[]
 	}
-	// end::always-do[]
+
 }

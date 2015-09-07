@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package com.example;
+package com.example.restassured;
 
 import org.junit.Before;
 import org.junit.Rule;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.RestDocumentation;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import com.jayway.restassured.builder.RequestSpecBuilder;
+import com.jayway.restassured.specification.RequestSpecification;
 
-public class ExampleApplicationTests {
+import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
+
+public class CustomEncoding {
 
 	@Rule
-	public final RestDocumentation restDocumentation = new RestDocumentation("target/generated-snippets");
-	// tag::mock-mvc-setup[]
-	@Autowired
-	private WebApplicationContext context;
+	public final RestDocumentation restDocumentation = new RestDocumentation("build");
 
-	private MockMvc mockMvc;
+	private RequestSpecification spec;
 
 	@Before
 	public void setUp() {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-				.apply(documentationConfiguration(this.restDocumentation))
+		// tag::custom-encoding[]
+		this.spec = new RequestSpecBuilder()
+				.addFilter(documentationConfiguration(this.restDocumentation)
+						.snippets().withEncoding("ISO-8859-1"))
 				.build();
+		// end::custom-encoding[]
 	}
-	// end::mock-mvc-setup[]
+
 }
